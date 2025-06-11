@@ -1,0 +1,9 @@
+version: "2"
+authtoken: 2vlacWfBwpusXc4V9iLVYiDS7WC_4RLu31wmd62eRFPfxoqcQ
+tunnels:
+  nodejs:
+    addr: 5000
+    proto: http
+  python:
+    addr: 5001
+    proto: http
