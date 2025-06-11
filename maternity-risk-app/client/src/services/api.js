@@ -1,14 +1,12 @@
 import axios from 'axios';
 
 // API configuration
-const HF_API_URL = process.env.REACT_APP_HF_API_URL || 'https://api-inference.huggingface.co/models/CyberParv/maternity-health-risk';
-const HF_TOKEN = process.env.REACT_APP_HF_TOKEN;
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
 // Create axios instance with default config
 const api = axios.create({
-  baseURL: HF_API_URL,
+  baseURL: API_URL,
   headers: {
-    'Authorization': `Bearer ${HF_TOKEN}`,
     'Content-Type': 'application/json'
   }
 });
@@ -16,20 +14,8 @@ const api = axios.create({
 // API endpoints
 export const predictRisk = async (patientData) => {
   try {
-    console.log('Sending prediction request to Hugging Face API');
-    const response = await api.post('', {
-      inputs: {
-        systolic_bp: patientData.systolic_bp,
-        diastolic: patientData.diastolic,
-        bs: patientData.bs,
-        bmi: patientData.bmi,
-        heart_rate: patientData.heart_rate,
-        previous_complications: patientData.previous_complications,
-        preexisting_diabetes: patientData.preexisting_diabetes,
-        gestational_diabetes: patientData.gestational_diabetes,
-        mental_health: patientData.mental_health
-      }
-    });
+    console.log('Sending prediction request to backend');
+    const response = await api.post('/predict', patientData);
     return response.data;
   } catch (error) {
     console.error('Error making prediction:', error);
@@ -39,7 +25,7 @@ export const predictRisk = async (patientData) => {
 
 export const getModelInfo = async () => {
   try {
-    const response = await api.get('');
+    const response = await api.get('/health');
     return response.data;
   } catch (error) {
     console.error('Error getting model info:', error);

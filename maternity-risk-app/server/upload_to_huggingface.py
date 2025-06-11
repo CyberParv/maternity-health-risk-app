@@ -6,6 +6,8 @@ from dotenv import load_dotenv
 
 # Load environment variables
 load_dotenv()
+print("HF_USERNAME:", os.getenv("HF_USERNAME"))
+print("HF_TOKEN starts with:", os.getenv("HF_TOKEN")[:5])  # Just the start for safety
 
 # Initialize Hugging Face API
 api = HfApi()
@@ -75,9 +77,11 @@ def main():
     # Create repository if it doesn't exist
     repo_name = "maternity-health-risk"
     try:
-        create_repo(repo_name, private=False)
+        create_repo(f"{os.getenv('HF_USERNAME')}/{repo_name}", private=False)
+
     except Exception as e:
         print(f"Repository might already exist: {e}")
+
     
     # Convert and upload models
     models_dir = "../models"
@@ -106,6 +110,7 @@ def main():
             api.upload_folder(
                 folder_path=model_dir,
                 repo_id=f"{os.getenv('HF_USERNAME')}/{repo_name}",
+
                 repo_type="model"
             )
             
